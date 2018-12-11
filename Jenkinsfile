@@ -2,7 +2,7 @@ pipeline {
     agent any
     environment {
       ORG               = 'cb-kubecd'
-      APP_NAME          = 'jx-demo'
+      APP_NAME          = 'vlatombe-demo'
       CHARTMUSEUM_CREDS = credentials('jenkins-x-chartmuseum')
     }
     stages {
@@ -30,10 +30,8 @@ pipeline {
 
 
           dir ('./charts/preview') {
-
              sh "make preview"
              sh "jx preview --app $APP_NAME --dir ../.."
-
           }
         }
       }
@@ -43,8 +41,6 @@ pipeline {
         }
         steps {
             sh 'jx step pre extend'
-            git 'https://github.com/cb-kubecd/jx-demo.git'
-
             sh "git config --global credential.helper store"
             sh "jx step validate --min-jx-version 1.1.73"
             sh "jx step git credentials"
@@ -80,8 +76,8 @@ pipeline {
       }
     }
     post {
-                always {
-                    sh 'jx step post run'
-                }
-            }
-  }
+        always {
+            sh 'jx step post run'
+        }
+    }
+}
